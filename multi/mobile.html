@@ -67,6 +67,22 @@
         body.dark-mode .modal-content .modal-title {
             color: #fff;
         }
+
+        .watermark {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+            opacity: 0.7;
+            width: 80px; /* Adjust the width as needed */
+            height: auto; /* Adjust the height as needed */
+        }
+        
+        @media (max-width: 767px) { /* Adjust the breakpoint as needed */
+            .watermark {
+                width: 40px; /* Adjust the width for smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
@@ -85,7 +101,7 @@
                                 <b>Dimana mendapatkan link M3U Showroom?</b><br>
                                 Bisa didapatkan melalui link fullscreen JKT48 Live di telegram <a href="https://t.me/JKT48Live" target="_blank"> https://t.me/JKT48Live</a>
                                 <br><br>
-                                <img src="https://telegra.ph/file/652598e46fb3bde6586bc.png" width="50%"><br><br>
+                                <img src="https://telegra.ph/file/652598e46fb3bde6586bc.png" width="80%"><br><br>
                                 Copy link fullscreen nya, dan paste pada form input.<br>
                                 Selanjutnya klik tombol Tambah Video.
                             </p>
@@ -131,6 +147,11 @@
             const video = document.createElement('video');
             video.controls = true;
             videoWrapper.appendChild(video);
+
+            const watermark = document.createElement('img');
+            watermark.className = 'watermark';
+            watermark.src = 'https://telegra.ph/file/963f9a49015a2023558f9.png';
+            videoWrapper.appendChild(watermark);
 
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-danger delete-button';
