@@ -167,5 +167,17 @@
 
         initialize();
     </script>
+    <script>
+        // Mendeteksi lebar layar
+        function getScreenWidth() {
+            return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        }
+    
+        // Mengecek apakah lebar layar cukup kecil untuk dianggap sebagai perangkat mobile
+        if (getScreenWidth() <= 768) {
+            // Mengarahkan pengguna ke halaman mobile.html
+            window.location.href = "mobile.html";
+        }
+    </script>
 </body>
 </html>
