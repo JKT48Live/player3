@@ -111,11 +111,6 @@
                 return;
             }
 
-            if (currentVideoCount >= MAX_VIDEOS) {
-                alert('Maksimal 4 video telah dicapai');
-                return;
-            }
-
             const { videoWrapper, video } = createVideoElement();
             const videoContainer = document.getElementById('video-container');
             videoContainer.appendChild(videoWrapper);
@@ -126,10 +121,6 @@
 
             currentVideoCount++;
 
-            if (currentVideoCount >= MAX_VIDEOS) {
-                document.getElementById('add-button').disabled = true;
-            }
-
             linkInput.value = '';
         }
 
@@ -137,10 +128,6 @@
             const videoContainer = document.getElementById('video-container');
             videoContainer.removeChild(videoWrapper);
             currentVideoCount--;
-
-            if (currentVideoCount < MAX_VIDEOS) {
-                document.getElementById('add-button').disabled = false;
-            }
         }
 
         function initialize() {
