@@ -105,6 +105,7 @@
 
         function addVideoFromInput(linkInput) {
             const linkValue = linkInput.value.trim();
+            let m3uLink;
 
             if (linkValue === '') {
                 alert('Link M3U tidak boleh kosong');
@@ -115,8 +116,14 @@
             const videoContainer = document.getElementById('video-container');
             videoContainer.appendChild(videoWrapper);
 
+            if (linkValue.includes('jkt48live.github.io')) {
+                m3uLink = linkValue.split('#')[1];
+            } else {
+                m3uLink = linkValue;
+            }
+
             const hls = new Hls();
-            hls.loadSource(linkValue);
+            hls.loadSource(m3uLink);
             hls.attachMedia(video);
 
             currentVideoCount++;
