@@ -34,7 +34,6 @@
             top: 10px;
             right: 10px;
             z-index: 1;
-            opacity: 0.5;
         }
 
         .mode-switch-container {
@@ -49,8 +48,12 @@
         @media (max-width: 768px) {
             #video-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: 1fr 1fr 1fr 1fr;
+                grid-template-rows: repeat(auto-fill, minmax(300px, 1fr));
                 height: auto;
+            }
+
+            .video-wrapper {
+                margin-bottom: 10px;
             }
         }
 
@@ -97,7 +100,7 @@
 
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-danger delete-button';
-            deleteButton.textContent = 'X';
+            deleteButton.textContent = 'Hapus';
             deleteButton.addEventListener('click', function() {
                 deleteVideo(videoWrapper);
             });
