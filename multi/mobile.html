@@ -112,6 +112,9 @@
                 </div>
             </div>
             <div class="col-md-6">
+                <div class="text-center mb-4">
+                    <img id="logo" src="https://telegra.ph/file/6ba6704392a91e8ce7200.png" alt="Logo" width="100">
+                </div>
                 <form id="m3u-form">
                     <div class="input-group mb-3">
                         <div class="mode-switch-container">
@@ -138,6 +141,10 @@
     <script>
         const MAX_VIDEOS = 4;
         let currentVideoCount = 0;
+        const logoImage = {
+            dark: 'https://telegra.ph/file/963f9a49015a2023558f9.png',
+            light: 'https://telegra.ph/file/6ba6704392a91e8ce7200.png'
+        };
 
         function createVideoElement() {
             const videoWrapper = document.createElement('div');
@@ -225,6 +232,7 @@
             const modeSwitch = document.getElementById('mode-switch');
             const tutorialButton = document.getElementById('modal-tutor');
             const tutorialModal = new bootstrap.Modal(document.getElementById('tutorialModal'));
+            const logo = document.getElementById('logo');
             const body = document.body;
 
             form.addEventListener('submit', function(event) {
@@ -238,6 +246,8 @@
                 modeSwitch.classList.toggle('btn-dark');
                 modeSwitch.innerHTML = body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 
+                logo.src = body.classList.contains('dark-mode') ? logoImage.dark : logoImage.light;
+                
                 if (body.classList.contains('dark-mode')) {
                     tutorialModal._element.classList.add('dark-mode');
                 } else {
