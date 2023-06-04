@@ -61,6 +61,14 @@
             background-color: #333;
             color: #fff;
         }
+
+        @media (min-width: 769px) {
+            #video-container {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: 100vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -110,7 +118,7 @@
         }
 
         function addVideoFromInput(linkInput) {
-            const linkValue = linkInput.value.trim(); // Menghapus spasi di awal dan akhir input
+            const linkValue = linkInput.value.trim();
 
             if (linkValue === '') {
                 alert('Link M3U tidak boleh kosong');
