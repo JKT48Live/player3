@@ -189,6 +189,8 @@
 
             const hls = new Hls();
             hls.loadSource(m3uLink);
+            hls.currentLevel = -1;
+            hls.loadLevel = -1;
             hls.attachMedia(video);
 
             currentVideoCount++;
@@ -198,6 +200,14 @@
             }
 
             linkInput.value = '';
+
+            if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.addEventListener('canplay', function () {
+                    video.play();
+                });
+                video.src = m3uLink;
+                video.volume = 0.3;
+            }
         }
 
         function deleteVideo(videoWrapper) {
