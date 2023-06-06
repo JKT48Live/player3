@@ -1,6 +1,11 @@
 const video = document.getElementById('video');
 const qualityList = document.querySelector('#quality-list');
 
+const logoImage = {
+    dark: 'https://telegra.ph/file/963f9a49015a2023558f9.png',
+    light: 'https://telegra.ph/file/6ba6704392a91e8ce7200.png'
+};
+
 function playM3u8(url) {
     if (Hls.isSupported()) {
         video.volume = 0.3;
@@ -15,17 +20,7 @@ function playM3u8(url) {
             qualityList.innerHTML = '';
 
             const liDark = document.createElement('li');
-            const btnDark = document.createElement('button');
-            btnDark.classList.add('btn', 'btn-dark');
-            btnDark.innerHTML = '<i class="fa-regular fa-moon"></i>';
-            btnDark.onclick = function () {
-                const element = document.body;
-                element.classList.toggle("dark-mode");
-                btnDark.innerHTML = (btnDark.innerHTML.includes('fa-sun')) ? '<i class="fa-regular fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
-                (btnDark.classList[1].includes('btn-dark')) ? btnDark.classList.replace('btn-dark', 'btn-light') : btnDark.classList.replace('btn-light', 'btn-dark');
-            }
             liDark.style.listStyle = 'none';
-            liDark.appendChild(btnDark);
             qualityList.appendChild(liDark);
 
             if(levels.length > 1){
@@ -33,7 +28,7 @@ function playM3u8(url) {
                     const level = levels[i];
                     const listItem = document.createElement('li');
                     const levelBtn = document.createElement('button');
-                    levelBtn.classList.add('btn', 'btn-danger');
+                    levelBtn.classList.add('btn', 'btn-primary');
                     levelBtn.textContent = level.height + 'p';
                     levelBtn.value = i;
                     listItem.style.listStyle = 'none';
@@ -56,6 +51,29 @@ function playM3u8(url) {
         document.title = "JKT48 Live - " + url;
     }
 }
+
+function initialize() {
+    const modeSwitch = document.getElementById('mode-switch');
+    const logo = document.getElementById('logo');
+    const body = document.body;
+
+    modeSwitch.addEventListener('click', function() {
+        body.classList.toggle('dark-mode');
+        modeSwitch.classList.toggle('btn-light');
+        modeSwitch.classList.toggle('btn-dark');
+        modeSwitch.innerHTML = body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+
+        logo.src = body.classList.contains('dark-mode') ? logoImage.dark : logoImage.light;
+
+        if (body.classList.contains('dark-mode')) {
+            tutorialModal._element.classList.add('dark-mode');
+        } else {
+            tutorialModal._element.classList.remove('dark-mode');
+        }
+    });
+}
+
+initialize();
 
 function playPause() {
     video.paused ? video.play() : video.pause();
