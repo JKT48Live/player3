@@ -41,14 +41,14 @@ function playM3u8(url) {
             }
             video.play();
         });
-        document.title = "JKT48 Live - " + url;
+        //document.title = "JKT48 Live - " + url;
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = url;
         video.addEventListener('canplay', function () {
             video.play();
         });
         video.volume = 0.3;
-        document.title = "JKT48 Live - " + url;
+        //document.title = "JKT48 Live - " + url;
     }
 }
 
