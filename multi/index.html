@@ -128,8 +128,9 @@
                             <a id="mode-switch" class="btn btn-light">
                                 <i class="fas fa-moon"></i>
                             </a>
-                        </div>
-                        <div class="mode-switch-container">
+                            <a id="links" class="btn btn-light" href="https://jkt48live.github.io/links/" target="_blank">
+                                <i class="fas fa-external-link"></i>
+                            </a>
                             <a id="modal-tutor" class="btn btn-secondary">
                                 <i class="fas fa-question"></i>
                             </a>
@@ -233,6 +234,7 @@
             const form = document.getElementById('m3u-form');
             const linkInput = document.getElementById('m3u-link');
             const modeSwitch = document.getElementById('mode-switch');
+            const linksButton = document.getElementById('links');
             const tutorialButton = document.getElementById('modal-tutor');
             const tutorialModal = new bootstrap.Modal(document.getElementById('tutorialModal'));
             const logo = document.getElementById('logo');
@@ -246,7 +248,9 @@
             modeSwitch.addEventListener('click', function() {
                 body.classList.toggle('dark-mode');
                 modeSwitch.classList.toggle('btn-light');
+                linksButton.classList.toggle('btn-light');
                 modeSwitch.classList.toggle('btn-dark');
+                linksButton.classList.toggle('btn-dark');
                 modeSwitch.innerHTML = body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 
                 logo.src = body.classList.contains('dark-mode') ? logoImage.dark : logoImage.light;

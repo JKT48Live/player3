@@ -64,12 +64,6 @@ function initialize() {
         modeSwitch.innerHTML = body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 
         logo.src = body.classList.contains('dark-mode') ? logoImage.dark : logoImage.light;
-
-        if (body.classList.contains('dark-mode')) {
-            tutorialModal._element.classList.add('dark-mode');
-        } else {
-            tutorialModal._element.classList.remove('dark-mode');
-        }
     });
 }
 
