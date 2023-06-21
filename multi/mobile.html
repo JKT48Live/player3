@@ -150,6 +150,23 @@
                     </div>
                 </div>
             </div>
+            <!-- Error Modal -->
+            <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="errorText"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-6">
                 <div class="text-center mb-4">
                     <img id="logo" src="https://telegra.ph/file/6ba6704392a91e8ce7200.png" alt="Logo" width="100">
@@ -243,7 +260,6 @@
 
             const { videoWrapper, video } = createVideoElement();
             const videoContainer = document.getElementById('video-container');
-            videoContainer.appendChild(videoWrapper);
 
             if (linkValue.includes('jkt48live.github.io')) {
                 m3uLink = linkValue.split('#')[1];
@@ -251,22 +267,31 @@
                 m3uLink = linkValue;
             }
 
-            const hls = new Hls();
-            hls.loadSource(m3uLink);
-            hls.currentLevel = -1;
-            hls.loadLevel = -1;
-            hls.attachMedia(video);
+            if (m3uLink.endsWith('.m3u') || m3uLink.endsWith('.m3u8')) {
+                const hls = new Hls();
+                hls.loadSource(m3uLink);
+                hls.currentLevel = -1;
+                hls.loadLevel = -1;
+                hls.attachMedia(video);
 
-            currentVideoCount++;
+                currentVideoCount++;
 
-            linkInput.value = '';
+                linkInput.value = '';
 
-            if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.addEventListener('canplay', function () {
-                    video.play();
-                });
-                video.src = m3uLink;
-                video.volume = 0.3;
+                if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.addEventListener('canplay', function () {
+                        video.play();
+                    });
+                    video.src = m3uLink;
+                    video.volume = 0.3;
+                }
+
+                videoContainer.appendChild(videoWrapper);
+            } else {
+                const errorText = document.getElementById('errorText');
+                errorText.textContent = 'Invalid URL format. Pastikan paste URL dengan benar.';
+                const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                errorModal.show();
             }
         }
 
