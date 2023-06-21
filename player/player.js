@@ -64,6 +64,10 @@ function initialize() {
         modeSwitch.innerHTML = body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 
         logo.src = body.classList.contains('dark-mode') ? logoImage.dark : logoImage.light;
+
+        // Menyimpan preferensi mode pada local storage
+        const preferredMode = body.classList.contains('dark-mode') ? 'dark' : 'light';
+        localStorage.setItem('preferredMode', preferredMode);
     });
 }
 
@@ -115,4 +119,15 @@ if (window.innerWidth >= 1024) {
     video.style.cssText = 'height: 80vh; max-height: calc(100vw * 9 / 16);' //pc
 } else {
     video.style.cssText = 'max-height: 80vh; max-width: 100%;' //hp
+}
+
+// Memeriksa preferensi mode pada local storage
+const preferredMode = localStorage.getItem('preferredMode');
+if (preferredMode === 'dark') {
+    // Jika mode gelap dipilih sebelumnya, aktifkan dark mode
+    document.body.classList.add('dark-mode');
+    document.getElementById('mode-switch').classList.add('btn-dark');
+    document.getElementById('mode-switch').innerHTML = '<i class="fas fa-sun"></i>';
+    document.getElementById('links').classList.add('btn-dark');
+    document.getElementById('logo').src = 'https://telegra.ph/file/963f9a49015a2023558f9.png';
 }
