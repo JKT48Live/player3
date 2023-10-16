@@ -6,6 +6,22 @@ const logoImage = {
     light: 'https://telegra.ph/file/6ba6704392a91e8ce7200.png'
 };
 
+const XORCipher = {
+    decode(key, hexString) {
+        const hexes = hexString.match(/.{2}/g);
+        const bin = Uint8Array.from(hexes, (byte) => parseInt(byte, 16));
+        return xor_decrypt(key, bin);
+    }
+};
+
+function keyCharAt(key, i) {
+    return key.charCodeAt(Math.floor(i % key.length));
+}
+
+function xor_decrypt(key, bin) {
+    return Array.from(bin, (c, i) => String.fromCharCode(c ^ keyCharAt(key, i))).join('');
+}
+
 function playM3u8(url) {
     if (Hls.isSupported()) {
         video.volume = 0.3;
@@ -103,7 +119,8 @@ function vidFullscreen() {
     }
 }
 
-playM3u8(window.location.href.split("#")[1]);
+const linkto = XORCipher.decode('JKT48Live', window.location.href.split("#")[1])
+playM3u8(linkto);
 $(window).on('load', function () {
     $('#video').on('click', function () { this.paused ? this.play() : this.pause(); });
     Mousetrap.bind('space', playPause);

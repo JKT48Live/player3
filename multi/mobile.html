@@ -204,6 +204,22 @@
             light: 'https://telegra.ph/file/6ba6704392a91e8ce7200.png'
         };
 
+        const XORCipher = {
+            decode(key, hexString) {
+                const hexes = hexString.match(/.{2}/g);
+                const bin = Uint8Array.from(hexes, (byte) => parseInt(byte, 16));
+                return xor_decrypt(key, bin);
+            }
+        };
+
+        function keyCharAt(key, i) {
+            return key.charCodeAt(Math.floor(i % key.length));
+        }
+
+        function xor_decrypt(key, bin) {
+            return Array.from(bin, (c, i) => String.fromCharCode(c ^ keyCharAt(key, i))).join('');
+        }
+        
         function createVideoElement() {
             const videoWrapper = document.createElement('div');
             videoWrapper.className = 'video-wrapper';
@@ -263,9 +279,9 @@
             const videoContainer = document.getElementById('video-container');
 
             if (linkValue.includes('jkt48live.github.io')) {
-                m3uLink = linkValue.split('#')[1];
+                m3uLink = XORCipher.decode('JKT48Live', linkValue.split('#')[1]);
             } else {
-                m3uLink = linkValue;
+                m3uLink = XORCipher.decode('JKT48Live', linkValue);
             }
 
             if (m3uLink.endsWith('.m3u') || m3uLink.endsWith('.m3u8')) {
