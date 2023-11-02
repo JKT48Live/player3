@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JKT48 Live - Multi Stream</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <style>
+        #video-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            grid-gap: 10px;
+            height: 100vh;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 20px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            z-index: 1;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            transform: translate(50%, -50%);
+            z-index: 2;
+            opacity: 0.5;
+            background: none;
+            border: none;
+            color: #fff;
+            padding: 0;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .mode-switch-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .mode-switch-container .form-control {
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            #video-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr 1fr 1fr;
+                height: auto;
+            }
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #222;
+            color: #fff;
+        }
+
+        body.dark-mode .modal-content .modal-title {
+            color: #fff;
+        }
+
+        body.dark-mode .video-wrapper {
+            border-color: #999;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark-mode .video-wrapper::before {
+            background-color: #999;
+        }
+
+        body.dark-mode .delete-button {
+            color: #000;
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBYJS60HQB"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-MBYJS60HQB');
+    </script>
+    <script async src="https://arc.io/widget.min.js#oTY49Bnw"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <!-- Modal -->
+            <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tutorialModalLabel">Tutorial</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                Isi Form input dengan link M3U.<br><br>
+                                <b>Dimana mendapatkan link M3U?</b><br>
+                                Bisa didapat melalui JKT48 Live di Telegram <a href="https://t.me/JKT48Live" target="_blank"> https://t.me/JKT48Live</a>
+                                <br><br>
+                            </p>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                    <img src="https://telegra.ph/file/652598e46fb3bde6586bc.png" class="img-fluid">
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <img src="https://telegra.ph/file/ff78ea39ee977211b2835.png" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <br><br>
+                                Copy link seperti contoh diatas, dan paste pada form input. Selanjutnya klik tombol Tambah Video.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Error Modal -->
+            <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="errorText"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-center mb-4">
+                    <img id="logo" src="https://telegra.ph/file/6ba6704392a91e8ce7200.png" alt="Logo" width="150">
+                </div>
+                <form id="m3u-form">
+                    <div class="input-group mb-3">
+                        <div class="mode-switch-container">
+                            <a id="mode-switch" class="btn btn-light">
+                                <i class="fas fa-moon"></i>
+                            </a>
+                            <a id="links" class="btn btn-light" href="https://jkt48live.github.io/links/" target="_blank">
+                                <i class="fas fa-external-link"></i>
+                            </a>
+                            <a id="modal-tutor" class="btn btn-secondary">
+                                <i class="fas fa-question"></i>
+                            </a>
+                        </div>
+                        <input type="text" id="m3u-link" name="m3u-link" class="form-control" placeholder="Masukkan link M3U">
+                        <button type="submit" id="add-button" class="btn btn-primary">Tambah Video</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="video-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        const _0x44fa2b=_0x3e71;(function(_0x55d10a,_0x55421c){const _0x36ad1a=_0x3e71,_0x452329=_0x55d10a();while(!![]){try{const _0x91231e=-parseInt(_0x36ad1a(0x133))/0x1+parseInt(_0x36ad1a(0x119))/0x2*(-parseInt(_0x36ad1a(0x110))/0x3)+-parseInt(_0x36ad1a(0x10e))/0x4*(-parseInt(_0x36ad1a(0x10a))/0x5)+parseInt(_0x36ad1a(0xf6))/0x6*(parseInt(_0x36ad1a(0x108))/0x7)+-parseInt(_0x36ad1a(0x140))/0x8*(-parseInt(_0x36ad1a(0xf0))/0x9)+parseInt(_0x36ad1a(0x138))/0xa*(-parseInt(_0x36ad1a(0xf1))/0xb)+-parseInt(_0x36ad1a(0x106))/0xc*(-parseInt(_0x36ad1a(0x109))/0xd);if(_0x91231e===_0x55421c)break;else _0x452329['push'](_0x452329['shift']());}catch(_0x5c9106){_0x452329['push'](_0x452329['shift']());}}}(_0x2bc3,0x81fb8));const MAX_VIDEOS=0x4;function _0x3e71(_0x42f127,_0x427fd8){const _0x127b2a=_0x2bc3();return _0x3e71=function(_0x449359,_0x2611d9){_0x449359=_0x449359-0xe7;let _0x139447=_0x127b2a[_0x449359];return _0x139447;},_0x3e71(_0x42f127,_0x427fd8);}function _0x2bc3(){const _0x36f885=['charCodeAt','split','from','submit','getElementById','loadSource','preferredMode','[HrRyzWMMBRWqOsmQULBMXdITDWNsrXcKIMqHZczZUmBLHGHYK]','.m3u8','controls','errorModal','textContent','play','delete-button','video','24YtciDp','innerHTML','7RyBZnw','5837221WzioAe','580hzMpHD','click','Invalid\x20URL\x20format.\x20Pastikan\x20paste\x20URL\x20dengan\x20benar.','modal-tutor','22844cIAtpu','createElement','3JDJXgD','addEventListener','links','video-container','_element','https://telegra.ph/file/6ba6704392a91e8ce7200.png','video-wrapper','btn-light','errorText','1659638XAGXMV','floor','dark-mode','match','return\x20(function()\x20','apply','innerWidth','className','btn-dark','canplay','<i\x20class=\x22fas\x20fa-sun\x22></i>','includes','appendChild','remove','dark','mode-switch','div','tutorialModal','light','Link\x20M3U\x20tidak\x20boleh\x20kosong','currentLevel','removeChild','endsWith','classList','getItem','application/vnd.apple.mpegurl','566236vuHMgX','logo','HjktrR48liyzWve.MgithMuBRb.iWqoOsmQULBMXdITDWNsrXcKIMqHZczZUmBLHGHYK','canPlayType','preventDefault','4268720OiGrOJ','decode','<i\x20class=\x22fas\x20fa-times\x22></i>','add-button','Maksimal\x204\x20video\x20telah\x20dicapai','clientWidth','documentElement','location','24leBcgX','add','join','JKT48\x20Live','length','.m3u','button','toggle','attachMedia','src','<i\x20class=\x22fas\x20fa-moon\x22></i>','indexOf','show','slice','jkt48live.github.io','m3u-link','Modal','2207178iEGMax','11LBbzqD','body','contains','replace','{}.constructor(\x22return\x20this\x22)(\x20)','354594hQeCKl'];_0x2bc3=function(){return _0x36f885;};return _0x2bc3();}let currentVideoCount=0x0;const logoImage={'dark':'https://telegra.ph/file/963f9a49015a2023558f9.png','light':_0x44fa2b(0x115)},XORCipher={'decode'(_0x3992eb,_0x23832a){const _0x248974=_0x44fa2b,_0x1adf27=_0x23832a[_0x248974(0x11c)](/.{2}/g),_0x4b50e4=Uint8Array['from'](_0x1adf27,_0xf2eb42=>parseInt(_0xf2eb42,0x10));return xor_decrypt(_0x3992eb,_0x4b50e4);}};function keyCharAt(_0x5b0fd6,_0x5c0bc5){const _0x1a2bad=_0x44fa2b;return _0x5b0fd6[_0x1a2bad(0xf7)](Math[_0x1a2bad(0x11a)](_0x5c0bc5%_0x5b0fd6[_0x1a2bad(0x144)]));}function xor_decrypt(_0x582e86,_0x3c775d){const _0x329e6d=_0x44fa2b;return Array[_0x329e6d(0xf9)](_0x3c775d,(_0x4ccd4b,_0x1718b0)=>String['fromCharCode'](_0x4ccd4b^keyCharAt(_0x582e86,_0x1718b0)))[_0x329e6d(0x142)]('');}function createVideoElement(){const _0x1d29bf=_0x44fa2b,_0x4308c0=document[_0x1d29bf(0x10f)](_0x1d29bf(0x129));_0x4308c0[_0x1d29bf(0x120)]=_0x1d29bf(0x116);const _0x4510ef=document[_0x1d29bf(0x10f)](_0x1d29bf(0x105));_0x4510ef[_0x1d29bf(0x100)]=!![],_0x4308c0[_0x1d29bf(0x125)](_0x4510ef);const _0x2669a3=document[_0x1d29bf(0x10f)](_0x1d29bf(0x146));return _0x2669a3[_0x1d29bf(0x120)]=_0x1d29bf(0x104),_0x2669a3[_0x1d29bf(0x107)]=_0x1d29bf(0x13a),_0x2669a3[_0x1d29bf(0x111)](_0x1d29bf(0x10b),function(){deleteVideo(_0x4308c0);}),_0x4308c0[_0x1d29bf(0x125)](_0x2669a3),{'videoWrapper':_0x4308c0,'video':_0x4510ef};}function addVideoFromInput(_0x3d2f3f){const _0x4f7c3b=_0x44fa2b,_0xaa32c1=_0x3d2f3f['value']['trim']();let _0x1fc30c;if(_0xaa32c1===''){alert(_0x4f7c3b(0x12c));return;}if(currentVideoCount>=MAX_VIDEOS){alert(_0x4f7c3b(0x13c));return;}const {videoWrapper:_0x33f145,video:_0x401a7c}=createVideoElement(),_0x2549e7=document['getElementById']('video-container');_0xaa32c1[_0x4f7c3b(0x124)](_0x4f7c3b(0xed))?_0x1fc30c=XORCipher['decode'](_0x4f7c3b(0x143),_0xaa32c1[_0x4f7c3b(0xf8)]('#')[0x1]):_0x1fc30c=XORCipher[_0x4f7c3b(0x139)]('JKT48\x20Live',_0xaa32c1);if(_0x1fc30c[_0x4f7c3b(0x12f)](_0x4f7c3b(0x145))||_0x1fc30c[_0x4f7c3b(0x12f)](_0x4f7c3b(0xff))){const _0xe126e4=new Hls();_0xe126e4[_0x4f7c3b(0xfc)](_0x1fc30c),_0xe126e4[_0x4f7c3b(0x12d)]=-0x1,_0xe126e4['loadLevel']=-0x1,_0xe126e4[_0x4f7c3b(0xe7)](_0x401a7c),currentVideoCount++,currentVideoCount>=MAX_VIDEOS&&(document[_0x4f7c3b(0xfb)](_0x4f7c3b(0x13b))['disabled']=!![]),_0x3d2f3f['value']='',_0x401a7c[_0x4f7c3b(0x136)](_0x4f7c3b(0x132))&&(_0x401a7c[_0x4f7c3b(0x111)](_0x4f7c3b(0x122),function(){const _0x49de56=_0x4f7c3b;_0x401a7c[_0x49de56(0x103)]();}),_0x401a7c[_0x4f7c3b(0xe8)]=_0x1fc30c,_0x401a7c['volume']=0x1),_0x2549e7[_0x4f7c3b(0x125)](_0x33f145);}else{const _0x5a2870=document[_0x4f7c3b(0xfb)](_0x4f7c3b(0x118));_0x5a2870[_0x4f7c3b(0x102)]=_0x4f7c3b(0x10c);const _0xad103=new bootstrap[(_0x4f7c3b(0xef))](document[_0x4f7c3b(0xfb)](_0x4f7c3b(0x101)));_0xad103[_0x4f7c3b(0xeb)]();}}function deleteVideo(_0x2456d7){const _0x1004e0=_0x44fa2b,_0x30d5f2=document[_0x1004e0(0xfb)](_0x1004e0(0x113));_0x30d5f2[_0x1004e0(0x12e)](_0x2456d7),currentVideoCount--,currentVideoCount<MAX_VIDEOS&&(document[_0x1004e0(0xfb)](_0x1004e0(0x13b))['disabled']=![]);}function initialize(){const _0x3d0960=_0x44fa2b,_0xa1d9ce=(function(){let _0x324141=!![];return function(_0x360e74,_0x405f4f){const _0x53bac1=_0x324141?function(){const _0x2076ff=_0x3e71;if(_0x405f4f){const _0x39a11a=_0x405f4f[_0x2076ff(0x11e)](_0x360e74,arguments);return _0x405f4f=null,_0x39a11a;}}:function(){};return _0x324141=![],_0x53bac1;};}()),_0x571597=_0xa1d9ce(this,function(){const _0x5140d5=_0x3e71,_0x313da8=function(){const _0x45ce4c=_0x3e71;let _0x4a132e;try{_0x4a132e=Function(_0x45ce4c(0x11d)+_0x45ce4c(0xf5)+');')();}catch(_0x1be0e7){_0x4a132e=window;}return _0x4a132e;},_0x2cbd52=_0x313da8(),_0x4a92c3=new RegExp(_0x5140d5(0xfe),'g'),_0x351527=_0x5140d5(0x135)['replace'](_0x4a92c3,'')[_0x5140d5(0xf8)](';');let _0x330ab4,_0x4d664c,_0x53b9d5,_0x4347e5;const _0x1ebcd8=function(_0x2ad5f3,_0x29cccd,_0x48166b){const _0x3e7f55=_0x5140d5;if(_0x2ad5f3[_0x3e7f55(0x144)]!=_0x29cccd)return![];for(let _0x34faea=0x0;_0x34faea<_0x29cccd;_0x34faea++){for(let _0x5aa0fb=0x0;_0x5aa0fb<_0x48166b[_0x3e7f55(0x144)];_0x5aa0fb+=0x2){if(_0x34faea==_0x48166b[_0x5aa0fb]&&_0x2ad5f3[_0x3e7f55(0xf7)](_0x34faea)!=_0x48166b[_0x5aa0fb+0x1])return![];}}return!![];},_0x3bdd5d=function(_0x48b4f0,_0x5438c3,_0x4017a0){return _0x1ebcd8(_0x5438c3,_0x4017a0,_0x48b4f0);},_0x108816=function(_0x494a2e,_0x5610e1,_0x1460e1){return _0x3bdd5d(_0x5610e1,_0x494a2e,_0x1460e1);},_0x13b1a9=function(_0x351405,_0x36aa13,_0x3875cd){return _0x108816(_0x36aa13,_0x3875cd,_0x351405);};for(let _0x34c5b4 in _0x2cbd52){if(_0x1ebcd8(_0x34c5b4,0x8,[0x7,0x74,0x5,0x65,0x3,0x75,0x0,0x64])){_0x330ab4=_0x34c5b4;break;}}for(let _0x26d1cc in _0x2cbd52[_0x330ab4]){if(_0x13b1a9(0x6,_0x26d1cc,[0x5,0x6e,0x0,0x64])){_0x4d664c=_0x26d1cc;break;}}for(let _0x3175f3 in _0x2cbd52[_0x330ab4]){if(_0x108816(_0x3175f3,[0x7,0x6e,0x0,0x6c],0x8)){_0x53b9d5=_0x3175f3;break;}}if(!('~'>_0x4d664c))for(let _0x27e948 in _0x2cbd52[_0x330ab4][_0x53b9d5]){if(_0x3bdd5d([0x7,0x65,0x0,0x68],_0x27e948,0x8)){_0x4347e5=_0x27e948;break;}}if(!_0x330ab4||!_0x2cbd52[_0x330ab4])return;const _0x575fab=_0x2cbd52[_0x330ab4][_0x4d664c],_0x10fdc6=!!_0x2cbd52[_0x330ab4][_0x53b9d5]&&_0x2cbd52[_0x330ab4][_0x53b9d5][_0x4347e5],_0x1ddad9=_0x575fab||_0x10fdc6;if(!_0x1ddad9)return;let _0x138414=![];for(let _0x4e712a=0x0;_0x4e712a<_0x351527[_0x5140d5(0x144)];_0x4e712a++){const _0x13b4bc=_0x351527[_0x4e712a],_0x38af30=_0x13b4bc[0x0]===String['fromCharCode'](0x2e)?_0x13b4bc[_0x5140d5(0xec)](0x1):_0x13b4bc,_0x5b962d=_0x1ddad9['length']-_0x38af30[_0x5140d5(0x144)],_0x39a9f2=_0x1ddad9[_0x5140d5(0xea)](_0x38af30,_0x5b962d),_0x426e3f=_0x39a9f2!==-0x1&&_0x39a9f2===_0x5b962d;_0x426e3f&&((_0x1ddad9[_0x5140d5(0x144)]==_0x13b4bc[_0x5140d5(0x144)]||_0x13b4bc[_0x5140d5(0xea)]('.')===0x0)&&(_0x138414=!![]));}if(!_0x138414){const _0x442631=new RegExp('[fmWTJGFOLcEfBmawmVXqBSNyAHEJwdGJqHcALWzUGGAISJrfBNPZdHDBCYLxOUramcfSS]','g'),_0x118bda='hftmtpWTJGsFOLcE://fBmjakwmVXt4qBS8NyAHlEJwdivGJqHec.ALWgzitUGhuGbA.IioSJ/rlfiBNPnZdHkDsB/CYLxOUramcfSS'[_0x5140d5(0xf4)](_0x442631,'');_0x2cbd52[_0x330ab4][_0x53b9d5]=_0x118bda;}});_0x571597();const _0x5d9077=document[_0x3d0960(0xfb)]('m3u-form'),_0x3b23dd=document[_0x3d0960(0xfb)](_0x3d0960(0xee)),_0x50ee10=document[_0x3d0960(0xfb)](_0x3d0960(0x128)),_0x63e35f=document[_0x3d0960(0xfb)](_0x3d0960(0x112)),_0x393d8b=document[_0x3d0960(0xfb)](_0x3d0960(0x10d)),_0x254824=new bootstrap['Modal'](document['getElementById'](_0x3d0960(0x12a))),_0x358b90=document[_0x3d0960(0xfb)](_0x3d0960(0x134)),_0x4560d2=document['body'];_0x5d9077[_0x3d0960(0x111)](_0x3d0960(0xfa),function(_0x9f9171){const _0x3fd1be=_0x3d0960;_0x9f9171[_0x3fd1be(0x137)](),addVideoFromInput(_0x3b23dd);}),_0x50ee10[_0x3d0960(0x111)](_0x3d0960(0x10b),function(){const _0xb2e287=_0x3d0960;_0x4560d2['classList'][_0xb2e287(0x147)](_0xb2e287(0x11b)),_0x50ee10[_0xb2e287(0x130)][_0xb2e287(0x147)]('btn-light'),_0x63e35f[_0xb2e287(0x130)]['toggle'](_0xb2e287(0x117)),_0x50ee10[_0xb2e287(0x130)]['toggle']('btn-dark'),_0x63e35f['classList']['toggle'](_0xb2e287(0x121)),_0x50ee10[_0xb2e287(0x107)]=_0x4560d2[_0xb2e287(0x130)][_0xb2e287(0xf3)](_0xb2e287(0x11b))?_0xb2e287(0x123):_0xb2e287(0xe9),_0x358b90[_0xb2e287(0xe8)]=_0x4560d2[_0xb2e287(0x130)][_0xb2e287(0xf3)](_0xb2e287(0x11b))?logoImage[_0xb2e287(0x127)]:logoImage['light'];_0x4560d2[_0xb2e287(0x130)][_0xb2e287(0xf3)](_0xb2e287(0x11b))?_0x254824[_0xb2e287(0x114)]['classList'][_0xb2e287(0x141)](_0xb2e287(0x11b)):_0x254824[_0xb2e287(0x114)][_0xb2e287(0x130)][_0xb2e287(0x126)]('dark-mode');const _0x552583=_0x4560d2[_0xb2e287(0x130)]['contains'](_0xb2e287(0x11b))?_0xb2e287(0x127):_0xb2e287(0x12b);localStorage['setItem'](_0xb2e287(0xfd),_0x552583);}),_0x393d8b[_0x3d0960(0x111)]('click',function(){const _0x3ccf66=_0x3d0960;_0x254824[_0x3ccf66(0xeb)]();});}initialize();function getScreenWidth(){const _0x184e42=_0x44fa2b;return window[_0x184e42(0x11f)]||document[_0x184e42(0x13e)][_0x184e42(0x13d)]||document[_0x184e42(0xf2)][_0x184e42(0x13d)];}getScreenWidth()<=0x300&&(window[_0x44fa2b(0x13f)]['href']='mobile.html');const preferredMode=localStorage[_0x44fa2b(0x131)](_0x44fa2b(0xfd));preferredMode===_0x44fa2b(0x127)&&(document[_0x44fa2b(0xf2)]['classList'][_0x44fa2b(0x141)](_0x44fa2b(0x11b)),document[_0x44fa2b(0xfb)](_0x44fa2b(0x128))[_0x44fa2b(0x130)][_0x44fa2b(0x141)](_0x44fa2b(0x121)),document[_0x44fa2b(0xfb)](_0x44fa2b(0x128))[_0x44fa2b(0x107)]=_0x44fa2b(0x123),document[_0x44fa2b(0xfb)](_0x44fa2b(0x112))['classList'][_0x44fa2b(0x141)](_0x44fa2b(0x121)),document[_0x44fa2b(0xfb)]('logo')[_0x44fa2b(0xe8)]='https://telegra.ph/file/963f9a49015a2023558f9.png',document[_0x44fa2b(0xfb)]('tutorialModal')[_0x44fa2b(0x130)][_0x44fa2b(0x141)]('dark-mode'));
+    </script>
+</body>
+</html>
