@@ -119,7 +119,7 @@ function vidFullscreen() {
     }
 }
 
-const linkto = XORCipher.decode('JKT48Live', window.location.href.split("#")[1])
+const linkto = XORCipher.decode('JKT48 Live', window.location.href.split("#")[1])
 playM3u8(linkto);
 $(window).on('load', function () {
     $('#video').on('click', function () { this.paused ? this.play() : this.pause(); });

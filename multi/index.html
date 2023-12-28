@@ -102,6 +102,24 @@
         body.dark-mode .delete-button {
             color: #000;
         }
+
+        .rotate-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            transform: translate(50%, 50%);
+            z-index: 2;
+            opacity: 0.5;
+            background: none;
+            border: none;
+            color: #fff;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .rotate-button:hover {
+            opacity: 1;
+        }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBYJS60HQB"></script>
@@ -221,6 +239,13 @@
         function xor_decrypt(key, bin) {
             return Array.from(bin, (c, i) => String.fromCharCode(c ^ keyCharAt(key, i))).join('');
         }
+
+        function rotateVideo(video) {
+            const rotation = parseInt(video.dataset.rotation || '0');
+            const newRotation = (rotation + 90) % 360;
+            video.style.transform = `rotate(${newRotation}deg)`;
+            video.dataset.rotation = newRotation.toString();
+        }
         
         function createVideoElement() {
             const videoWrapper = document.createElement('div');
@@ -237,6 +262,14 @@
                 deleteVideo(videoWrapper);
             });
             videoWrapper.appendChild(deleteButton);
+
+            const rotateButton = document.createElement('button');
+            rotateButton.className = 'rotate-button';
+            rotateButton.innerHTML = '<i class="fas fa-sync-alt"></i>';
+            rotateButton.addEventListener('click', function() {
+                rotateVideo(video);
+            });
+            videoWrapper.appendChild(rotateButton);
 
             return { videoWrapper, video };
         }
@@ -259,9 +292,9 @@
             const videoContainer = document.getElementById('video-container');
 
             if (linkValue.includes('jkt48live.github.io')) {
-                m3uLink = XORCipher.decode('JKT48Live', linkValue.split('#')[1]); // Mengambil bagian setelah karakter '#' pada link
+                m3uLink = XORCipher.decode('JKT48 Live', linkValue.split('#')[1]); // Mengambil bagian setelah karakter '#' pada link
             } else {
-                m3uLink = XORCipher.decode('JKT48Live', linkValue);
+                m3uLink = XORCipher.decode('JKT48 Live', linkValue);
             }
 
             if (m3uLink.endsWith('.m3u') || m3uLink.endsWith('.m3u8')) {
