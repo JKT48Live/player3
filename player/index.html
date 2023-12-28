@@ -125,7 +125,10 @@
         <div id="video-container" class="mb-4">
           <video id="video" class="w-100" controls style="height: 80vh; max-height: calc(100vw * 9 / 16);"></video>
           <img id="watermark" src="https://telegra.ph/file/963f9a49015a2023558f9.png" alt="Watermark">
-        </div>
+          <a id="rotate-button" class="btn btn-light" onclick="rotateVideo()">
+            <i class="fas fa-sync-alt"></i> Rotate
+          </a>
+        </div>      
         <div id="quality-wrapper" class="mb-4" style="width: 100%;">
           <ul id="quality-list" class="list-unstyled mb-0"></ul>
         </div>
@@ -135,5 +138,16 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="mousetrap.min.js" charset="utf-8"></script>
     <script src="player.js"></script>
+    <script>
+      let rotation = 0;
+    
+      function rotateVideo() {
+        rotation += 90;
+        if (rotation >= 360) {
+          rotation = 0;
+        }
+        document.getElementById('video').style.transform = 'rotate(' + rotation + 'deg)'; // Terapkan rotasi
+      }
+    </script>
   </body>
 </html>
